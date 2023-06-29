@@ -9,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  double top = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,14 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 kBackgroundImage,
                 fit: BoxFit.cover,
               ),
-              title: const Row(
-                children: [
-                  SizedBox(width: 12),
-                  CircleAvatar(backgroundImage: NetworkImage(kUserImage)),
-                  SizedBox(width: 12),
-                  Text('Mitsuki'),
-                ],
-              ),
+              title: LayoutBuilder(builder: (context, constraints) {
+                top = constraints.biggest.height;
+                return AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: top <= 200 ? 1 : 0,
+                  child: const Row(
+                    children: [
+                      SizedBox(width: 12),
+                      CircleAvatar(backgroundImage: NetworkImage(kUserImage)),
+                      SizedBox(width: 12),
+                      Text('Mitsuki'),
+                    ],
+                  ),
+                );
+              }),
             ),
           ),
           SliverToBoxAdapter(
