@@ -57,4 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Widget _buildFab() {
+    return FloatingActionButton(
+      onPressed: () {},
+      child: const Icon(Icons.star_outline),
+    );
+  }
 }
