@@ -12,6 +12,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   double top = 0;
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           CustomScrollView(
+            controller: _scrollController,
             slivers: [
               _sliverAppbarWidget(),
               SliverToBoxAdapter(
@@ -46,10 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        background: Image.network(
-          kBackgroundImage,
-          fit: BoxFit.cover,
-        ),
+        background: Image.network(kBackgroundImage, fit: BoxFit.cover),
         title: LayoutBuilder(builder: (context, constraints) {
           top = constraints.biggest.height;
           return AnimatedOpacity(
@@ -70,12 +77,35 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildFab() {
+    double defaultMargin = Platform.isAndroid ? 250 : 270;
+    double defaultStart = 150;
+    double defaultEnd = defaultStart / 2;
+
+    double top = defaultMargin;
+    double scale = 1.0;
+
+    if (_scrollController.hasClients) {
+      double offset = _scrollController.offset;
+      top -= offset;
+
+      if (offset < defaultMargin - defaultStart) {
+        scale = 1;
+      } else if (offset < defaultStart - defaultMargin) {
+        scale = (defaultMargin - defaultEnd - offset) / defaultEnd;
+      } else {
+        scale = 0;
+      }
+    }
+
     return Positioned(
-      top: Platform.isAndroid ? 250 : 270,
+      top: top,
       right: 20,
-      child: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.star_outline),
+      child: Transform(
+        transform: Matrix4.identity()..scale(scale),
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.star_outline),
+        ),
       ),
     );
   }
