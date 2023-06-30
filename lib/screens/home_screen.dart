@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   SliverAppBar _sliverAppbarWidget() {
     return SliverAppBar(
       expandedHeight: 250,
+      toolbarHeight: 65,
       pinned: true,
       stretch: true,
       flexibleSpace: FlexibleSpaceBar(
