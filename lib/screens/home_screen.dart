@@ -16,9 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _scrollController.addListener(() {
-      setState(() {});
-    });
+    _scrollController.addListener(() => setState(() {}));
     super.initState();
   }
 
